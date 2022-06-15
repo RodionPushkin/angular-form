@@ -26,7 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms';
       </div>
       <div class="form">
         <p>Сумма бг</p>
-        <input [(ngModel)]="amount" type="text" placeholder="сумма">
+        <input [(ngModel)]="amount" type="text" placeholder="сумма" (input)="changeAmount($event)">
         <p>Период в месяцах</p>
         <input [(ngModel)]="duration" type="text" placeholder="Например 1 месяц" (input)="changeDuration($event)">
         <p>Номер телефона</p>
@@ -48,7 +48,18 @@ export class AppComponent {
   duration: string = "";
   amount: string = "";
   formatDuration(text : string){
-    return text.replace(/\D/g, "").length >= 3 ? text.replace(/\D/g, "").substring(0,3)+" месяцев" : text.replace(/\D/g, "")
+    return text.replace(/\D/g, "").length >= 3 ?
+      text.replace(/\D/g, "").substr(0, 3)+" месяцев" :
+      text.replace(/\D/g, "").substr(0, 3)
+  }
+  formatAmount(text : string){
+    if(text.length == 0){
+      return ""
+    }
+    return (parseInt(text.replace(/\D/g, "").replace(/\s/g, ''))).toLocaleString('ru-Ru')
+  }
+  changeAmount(e: any){
+    this.amount = this.formatAmount(e.target.value)
   }
   changeDuration(e: any){
     console.log(this.duration)
