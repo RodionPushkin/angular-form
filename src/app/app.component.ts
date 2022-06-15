@@ -7,6 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title: string = 'angularlearn';
+  ngOnInit() {
+    this.formFormat()
+  }
   toggleSlide(slideNum: number){
     const slides = document.querySelectorAll('.slide')
     for (let i = 0; i < slides.length; i++) {
@@ -142,16 +145,10 @@ export class AppComponent {
     let inputDuration = document.getElementById('duration') as HTMLInputElement;
     let inputPhone = document.getElementById('phone') as HTMLInputElement;
 
-    // @ts-ignore
     if(inputAmount.value.length != 0 || inputDuration.value.length != 0 || inputPhone.value.length != 0){
-
-    }else{
       console.log("sending data...");
-      // @ts-ignore
       inputAmount.value = ""
-      // @ts-ignore
       inputDuration.value = ""
-      // @ts-ignore
       inputPhone.value = ""
       this.toggleSlide(2)
       setTimeout(()=>{
