@@ -26,11 +26,11 @@ import { ReactiveFormsModule } from '@angular/forms';
       </div>
       <div class="form">
         <p>Сумма бг</p>
-        <input [(ngModel)]="amount" type="text" placeholder="сумма" (input)="changeAmount($event)">
+        <input [(ngModel)]="amount" type="text" placeholder="сумма" (change)="changeAmount($event)">
         <p>Период в месяцах</p>
-        <input [(ngModel)]="duration" type="text" placeholder="Например 1 месяц" (input)="changeDuration($event)">
+        <input [(ngModel)]="duration" type="text" placeholder="Например 1 месяц" (change)="changeDuration($event)">
         <p>Номер телефона</p>
-        <input [(ngModel)]="phone" type="text" placeholder="телефон">
+        <input [(ngModel)]="phone" type="text" placeholder="телефон" (change)="changePhone($event)">
         <p class="precost">Одобрено <span>200 000 ₽</span></p>
       </div>
       <button class="button" (click)="sendData()">отправить</button>
@@ -52,6 +52,37 @@ export class AppComponent {
       text.replace(/\D/g, "").substr(0, 3)+" месяцев" :
       text.replace(/\D/g, "").substr(0, 3)
   }
+  formatPhone(text : string){
+    let inputNumbersValue = text.replace(/\D/g, "")
+    let formattedValue = ""
+    if (inputNumbersValue == null || inputNumbersValue == "") {
+      formattedValue = ""
+    } else {
+      if (["7", "8", "9"].indexOf(inputNumbersValue[0]) > -1) {
+        if (inputNumbersValue[0] == "9") {
+          formattedValue = "7" + inputNumbersValue
+        }
+        let firstSymbols = (inputNumbersValue[0] == "8") ? "8" : "+7"
+        formattedValue = firstSymbols + " "
+        if (inputNumbersValue.length > 1) {
+          formattedValue += "(" + inputNumbersValue.substring(1, 4)
+        }
+        if (inputNumbersValue.length >= 5) {
+          formattedValue += ") " + inputNumbersValue.substring(4, 7)
+        }
+        if (inputNumbersValue.length >= 8) {
+          formattedValue += "-" + inputNumbersValue.substring(7, 9)
+        }
+        if (inputNumbersValue.length >= 10) {
+          formattedValue += "-" + inputNumbersValue.substring(9, 11)
+        }
+      } else {
+        formattedValue = "+" + inputNumbersValue.substring(0, 16)
+      }
+    }
+
+    return formattedValue
+  }
   formatAmount(text : string){
     if(text.length == 0){
       return ""
@@ -60,13 +91,15 @@ export class AppComponent {
   }
   changeAmount(e: any){
     this.amount = this.formatAmount(e.target.value)
+    e.target.value = this.formatAmount(e.target.value)
   }
   changeDuration(e: any){
-    console.log(this.duration)
-    if(this.duration != this.formatDuration(e.target.value)){
-      this.duration = this.formatDuration(e.target.value)
-    }
-    console.log(this.duration)
+    this.duration = this.formatDuration(e.target.value)
+    e.target.value = this.formatDuration(e.target.value)
+  }
+  changePhone(e: any){
+    this.phone = this.formatPhone(e.target.value)
+    e.target.value = this.formatPhone(e.target.value)
   }
   sendData(){
     console.log("sending data...");
